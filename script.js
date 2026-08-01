@@ -180,21 +180,35 @@ function initLoader() {
 /* ---------- hero button ---------- */
 function initHeroButton() {
   const btn = document.getElementById("openBtn");
-  btn.addEventListener("click", (e) => {
-    // ripple
+  const declineBtn = document.getElementById("declineBtn");
+  const question = document.querySelector(".hero-question");
+
+  const triggerRipple = (button, event) => {
     const rip = document.createElement("span");
     rip.className = "rip";
-    const r = btn.getBoundingClientRect();
+    const r = button.getBoundingClientRect();
     const size = Math.max(r.width, r.height);
     rip.style.width = rip.style.height = size + "px";
-    rip.style.left = e.clientX - r.left - size / 2 + "px";
-    rip.style.top = e.clientY - r.top - size / 2 + "px";
-    btn.appendChild(rip);
+    rip.style.left = event.clientX - r.left - size / 2 + "px";
+    rip.style.top = event.clientY - r.top - size / 2 + "px";
+    button.appendChild(rip);
     setTimeout(() => rip.remove(), 600);
-    // confetti + scroll
+  };
+
+  btn.addEventListener("click", (e) => {
+    triggerRipple(btn, e);
     burstConfetti();
     document.getElementById("counter").scrollIntoView({ behavior: "smooth" });
   });
+
+  if (declineBtn) {
+    declineBtn.addEventListener("click", (e) => {
+      triggerRipple(declineBtn, e);
+      if (question) {
+        question.textContent = "Okay, maybe later 💕";
+      }
+    });
+  }
 }
 
 /* ---------- music ---------- */
