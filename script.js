@@ -420,21 +420,54 @@ function initLoader() {
 /* ---------- hero button ---------- */
 function initHeroButton() {
   const btn = document.getElementById("openBtn");
-  btn.addEventListener("click", (e) => {
-    // ripple
+  const declineBtn = document.getElementById("declineBtn");
+  const question = document.querySelector(".hero-question");
+
+  const triggerRipple = (button, event) => {
     const rip = document.createElement("span");
     rip.className = "rip";
-    const r = btn.getBoundingClientRect();
+    const r = button.getBoundingClientRect();
     const size = Math.max(r.width, r.height);
     rip.style.width = rip.style.height = size + "px";
-    rip.style.left = e.clientX - r.left - size / 2 + "px";
-    rip.style.top = e.clientY - r.top - size / 2 + "px";
-    btn.appendChild(rip);
+    rip.style.left = event.clientX - r.left - size / 2 + "px";
+    rip.style.top = event.clientY - r.top - size / 2 + "px";
+    button.appendChild(rip);
     setTimeout(() => rip.remove(), 600);
-    // confetti + scroll
+  };
+
+  btn.addEventListener("click", (e) => {
+    triggerRipple(btn, e);
     burstConfetti();
     document.getElementById("counter").scrollIntoView({ behavior: "smooth" });
   });
+
+  if (declineBtn) {
+    const dodgeButton = (event) => {
+      const rect = declineBtn.getBoundingClientRect();
+      const containerRect = declineBtn.parentElement?.getBoundingClientRect();
+      if (!containerRect) return;
+
+      const maxX = Math.max(40, containerRect.width - rect.width - 20);
+      const maxY = Math.max(30, containerRect.height - rect.height - 20);
+      const shiftX = (Math.random() * 2 - 1) * (maxX / 2);
+      const shiftY = (Math.random() * 2 - 1) * (maxY / 2);
+
+      declineBtn.style.transform = `translate(${shiftX}px, ${shiftY}px)`;
+      declineBtn.style.zIndex = "3";
+      if (question) {
+        question.textContent = "Nope, try again 😄";
+      }
+    };
+
+    declineBtn.addEventListener("mouseenter", dodgeButton);
+    declineBtn.addEventListener("mousemove", dodgeButton);
+    declineBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerRipple(declineBtn, e);
+      dodgeButton(e);
+    });
+  }
 }
 
 /* ---------- music ---------- */
@@ -803,6 +836,7 @@ function initGift() {
 }
 function celebrate() {
   burstConfetti();
+  burstLilies();
   // fireworks
   const end = Date.now() + 2500;
   (function frame() {
@@ -811,6 +845,31 @@ function celebrate() {
     if (Date.now() < end) requestAnimationFrame(frame);
   })();
   smallHearts();
+}
+function burstLilies() {
+  const layer = document.createElement("div");
+  layer.className = "gift-burst-layer";
+  const flowers = ["🌸", "🌼", "🌷", "🪻", "💐"];
+
+  for (let i = 0; i < 90; i++) {
+    const petal = document.createElement("span");
+    petal.className = "gift-flower-piece";
+    petal.textContent = flowers[i % flowers.length];
+
+    const angle = (i / 90) * Math.PI * 2 + Math.random() * 0.35;
+    const distance = 120 + Math.random() * 280;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance - 20 + Math.random() * 30;
+    const scale = 0.7 + Math.random() * 0.8;
+
+    petal.style.setProperty("--dx", `${dx}px`);
+    petal.style.setProperty("--dy", `${dy}px`);
+    petal.style.setProperty("--scale", `${scale}`);
+    layer.appendChild(petal);
+  }
+
+  document.body.appendChild(layer);
+  setTimeout(() => layer.remove(), 1800);
 }
 function burstConfetti() {
   if (typeof confetti !== "function") return;
