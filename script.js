@@ -21,6 +21,7 @@ const CONFIG = {
   // Drop an .mp3 in assets/music/ and put its path here.
   musicSrc: "assets/music/song.mp3",
   musicVolume: 0.6,
+  videoSrc: "assets/videos/memory.mp4",
 
   /* --- love letter (types out on screen) --- */
   letter: `From the very first day, you turned ordinary moments into memories I never want to forget.
@@ -35,17 +36,26 @@ You are my favorite hello and my hardest goodbye.`,
      Replace src with your own images in assets/images/.
      Add as many as you like — layout adapts automatically. */
   gallery: [
-    { src: "assets/images/998BCA48-13F2-425C-97EE-7D8A55DF962D_1_105_c.jpeg", cap: "us ♥" },
-    { src: "assets/images/049279C0-6971-4D32-A23A-22AADB808DB8_1_105_c.jpeg", cap: "silly us" },
-    { src: "assets/images/dji_fly_20260714_31804 PM_0047_1784026442400_photo.jpg", cap: "golden hour" },
-    { src: "assets/images/29001E4A-5FA6-49F2-A74B-8D209281D210_1_105_c.jpeg", cap: "dreaming" },
-    { src: "assets/images/471866EE-17A5-4433-AA6C-1AD4E16679FB_1_105_c.jpeg", cap: "you & me" },
-    { src: "assets/images/C9514BB4-4F5D-41CC-9E86-4C217E19E9F5_1_105_c.jpeg", cap: "our spark" },
-    { src: "assets/images/AE59F9B0-E05D-4B08-B33A-71840507BED9_1_105_c.jpeg", cap: "quiet smile" },
-    { src: "assets/images/F23C4727-7801-427F-9725-62EECCD27F49_1_105_c.jpeg", cap: "favorite view" },
+    { src: "assets/images/photo1.jpg", cap: "us ♥" },
+    { src: "assets/images/photo2.jpg", cap: "playtime" },
+    { src: "assets/images/ph1.jpg", cap: "memory" },
+    { src: "assets/images/ph2.jpg", cap: "adventures" },
+    { src: "assets/images/ph3.jpg", cap: "date night" },
+    { src: "assets/images/ph4.jpg", cap: "silly us" },
+    { src: "assets/images/ph5.jpg", cap: "golden hour" },
+    { src: "assets/images/ph6.jpg", cap: "forever" },
+    { src: "assets/images/ph7.jpg", cap: "sunsets" },
+    { src: "assets/images/ph8.jpg", cap: "little trips" },
     { src: "assets/images/photo1.jpg", cap: "my person" },
     { src: "assets/images/photo2.jpg", cap: "good times" },
-    { src: "assets/images/IMG_0252.JPG", cap: "cozy day" },
+    { src: "assets/images/ph1.jpg", cap: "cozy days" },
+    { src: "assets/images/ph2.jpg", cap: "us again" },
+    { src: "assets/images/ph3.jpg", cap: "laughing" },
+    { src: "assets/images/ph4.jpg", cap: "dreaming" },
+    { src: "assets/images/ph5.jpg", cap: "you & me" },
+    { src: "assets/images/ph6.jpg", cap: "always" },
+    { src: "assets/images/ph7.jpg", cap: "smile" },
+    { src: "assets/images/ph8.jpg", cap: "home" },
   ],
 
   /* --- journey timeline --- */
@@ -103,10 +113,10 @@ You are my favorite hello and my hardest goodbye.`,
 
   /* --- memory book pages --- */
   book: [
-    { title: "Chapter One", text: "Where our story began…", img: "assets/images/photo2.jpg" },
-    { title: "The Little Things", text: "Inside jokes, late-night talks, and everything between.", img: "assets/images/ph3.jpg" },
+    { title: "Chapter One", text: "Where our story began…", img: "assets/images/998BCA48-13F2-425C-97EE-7D8A55DF962D_1_105_c.jpeg" },
+    { title: "The Little Things", text: "Inside jokes, late-night talks, and everything between.", img: "assets/images/DA9312FC-14F5-4743-8998-FE5AE14D63EC_1_105_c.jpeg" },
     { title: "Our Adventures", text: "Every place is better with you in it.", img: "assets/images/photo1.jpg" },
-    { title: "To Be Continued…", text: "The best pages haven't been written yet.", img: "assets/images/ph6.jpg" },
+    { title: "To Be Continued…", text: "The best pages haven't been written yet.", img: "assets/images/44742D88-1ADA-4A78-A614-E6A4B842C1CB_1_105_c.jpeg" },
   ],
 
   /* --- gift box reveal & ending --- */
@@ -122,6 +132,10 @@ You are my favorite hello and my hardest goodbye.`,
    ============================================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
+  const savedContent = loadAdminContent();
+  if (savedContent) {
+    applyAdminContent(savedContent);
+  }
   applyNames();
   buildGallery();
   buildTimeline();
@@ -141,18 +155,244 @@ document.addEventListener("DOMContentLoaded", () => {
   startCounter();
   initAOS();
   initScrollAnims();
+  initAdmin();
 });
 
 /* ---------- names ---------- */
 function applyNames() {
   const her = CONFIG.herName, you = CONFIG.yourName;
-  document.querySelector(".hero-title").innerHTML =
-    `Happy Girlfriend Day <span class="beat">❤️</span>`;
+  const heroTitleText = document.getElementById("heroTitleText");
+  if (heroTitleText) heroTitleText.textContent = "Happy Girlfriend Day";
   const greet = document.getElementById("letterGreeting");
   if (greet) greet.textContent = `Dear ${her},`;
   const sign = document.getElementById("letterSign");
   if (sign) sign.textContent = `— Yours, ${you}`;
   document.title = `Happy Girlfriend Day, ${her} ❤️`;
+}
+
+/* ---------- admin editor ---------- */
+const ADMIN_PASSWORD = "gfday2026";
+let adminUnlocked = false;
+
+function getDefaultAdminContent() {
+  return {
+    herName: CONFIG.herName,
+    yourName: CONFIG.yourName,
+    gallery: CONFIG.gallery.map((item) => ({ ...item })),
+    musicSrc: CONFIG.musicSrc,
+    musicVolume: CONFIG.musicVolume,
+    videoSrc: CONFIG.videoSrc,
+    startDate: toDateInputValue(CONFIG.startDate),
+    heroTitle: "Happy Girlfriend Day",
+    heroKicker: "for the one I adore",
+    heroSub: "I made something special just for you.",
+    letterGreeting: `Dear ${CONFIG.herName},`,
+    letterBody: CONFIG.letter,
+    letterSign: `— Yours, ${CONFIG.yourName}`,
+    reveal1: "I Love You ❤️",
+    reveal2: "Happy Girlfriend Day",
+    reveal3: "You are my favorite person in the entire universe.",
+  };
+}
+function toDateInputValue(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+function loadAdminContent() {
+  try {
+    const raw = localStorage.getItem("gf-day-admin-content");
+    if (!raw) return getDefaultAdminContent();
+    const parsed = JSON.parse(raw);
+    return { ...getDefaultAdminContent(), ...parsed };
+  } catch {
+    return getDefaultAdminContent();
+  }
+}
+function renderGalleryPreview(content = loadAdminContent()) {
+  const preview = document.getElementById("adminGalleryPreview");
+  if (!preview) return;
+  const items = (content && content.gallery && content.gallery.length) ? content.gallery : CONFIG.gallery;
+  preview.innerHTML = "";
+  items.slice(0, 8).forEach((item) => {
+    const img = document.createElement("img");
+    img.src = item.src;
+    img.alt = item.cap || "gallery";
+    preview.appendChild(img);
+  });
+}
+function populateAdminForm(content = loadAdminContent()) {
+  document.getElementById("adminHerName").value = content.herName || "";
+  document.getElementById("adminYourName").value = content.yourName || "";
+  document.getElementById("adminStartDate").value = content.startDate || toDateInputValue(CONFIG.startDate);
+  document.getElementById("adminHeroTitle").value = content.heroTitle || "Happy Girlfriend Day";
+  document.getElementById("adminHeroKicker").value = content.heroKicker || "for the one I adore";
+  document.getElementById("adminHeroSub").value = content.heroSub || "I made something special just for you.";
+  document.getElementById("adminLetterGreeting").value = content.letterGreeting || `Dear ${CONFIG.herName},`;
+  document.getElementById("adminLetterBody").value = content.letterBody || CONFIG.letter;
+  document.getElementById("adminLetterSign").value = content.letterSign || `— Yours, ${CONFIG.yourName}`;
+  document.getElementById("adminReveal1").value = content.reveal1 || "I Love You ❤️";
+  document.getElementById("adminReveal2").value = content.reveal2 || "Happy Girlfriend Day";
+  document.getElementById("adminReveal3").value = content.reveal3 || "You are my favorite person in the entire universe.";
+}
+function applyAdminContent(content = loadAdminContent()) {
+  const data = { ...getDefaultAdminContent(), ...content };
+  CONFIG.herName = data.herName || CONFIG.herName;
+  CONFIG.yourName = data.yourName || CONFIG.yourName;
+  const parsedDate = new Date(data.startDate || toDateInputValue(CONFIG.startDate));
+  if (!Number.isNaN(parsedDate.getTime())) CONFIG.startDate = parsedDate;
+  CONFIG.letter = data.letterBody || CONFIG.letter;
+  if (data.gallery) CONFIG.gallery = data.gallery;
+  if (data.musicSrc) CONFIG.musicSrc = data.musicSrc;
+  if (typeof data.musicVolume === "number") CONFIG.musicVolume = data.musicVolume;
+  if (data.videoSrc) CONFIG.videoSrc = data.videoSrc;
+
+  const heroTitleText = document.getElementById("heroTitleText");
+  if (heroTitleText) heroTitleText.textContent = data.heroTitle || "Happy Girlfriend Day";
+  const heroKicker = document.querySelector(".hero-kicker");
+  if (heroKicker) heroKicker.textContent = data.heroKicker || "for the one I adore";
+  const heroSub = document.querySelector(".hero-sub");
+  if (heroSub) heroSub.textContent = data.heroSub || "I made something special just for you.";
+  const greet = document.getElementById("letterGreeting");
+  if (greet) greet.textContent = data.letterGreeting || `Dear ${CONFIG.herName},`;
+  const sign = document.getElementById("letterSign");
+  if (sign) sign.textContent = data.letterSign || `— Yours, ${CONFIG.yourName}`;
+  const reveal1 = document.getElementById("revealLine1");
+  if (reveal1) reveal1.textContent = data.reveal1 || "I Love You ❤️";
+  const reveal2 = document.getElementById("revealLine2");
+  if (reveal2) reveal2.textContent = data.reveal2 || "Happy Girlfriend Day";
+  const reveal3 = document.getElementById("revealLine3");
+  if (reveal3) reveal3.textContent = data.reveal3 || "You are my favorite person in the entire universe.";
+
+  document.title = `Happy Girlfriend Day, ${CONFIG.herName} ❤️`;
+  const since = document.getElementById("counterSince");
+  if (since) {
+    since.textContent = "since " + CONFIG.startDate.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+  }
+
+  const typed = document.getElementById("typed");
+  if (typed) {
+    typed.innerHTML = CONFIG.letter.replace(/\n/g, "<br>");
+    letterTyped = true;
+    const cursor = document.querySelector(".cursor");
+    if (cursor) cursor.style.display = "none";
+  }
+
+  const audio = document.getElementById("audio");
+  if (audio) {
+    audio.src = CONFIG.musicSrc;
+    audio.volume = CONFIG.musicVolume;
+  }
+
+  const video = document.getElementById("memoryVideo");
+  if (video) {
+    const source = video.querySelector("source");
+    if (source) source.src = CONFIG.videoSrc;
+    video.load();
+  }
+}
+async function saveAdminContent() {
+  const musicInput = document.getElementById("adminMusicUpload");
+  const videoInput = document.getElementById("adminVideoUpload");
+  const galleryInput = document.getElementById("adminGalleryFiles");
+  const galleryCaptions = document.getElementById("adminGalleryCaptions").value.split(/\n/).map((p) => p.trim()).filter(Boolean);
+
+  const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+
+  let musicSrc = CONFIG.musicSrc;
+  if (musicInput && musicInput.files && musicInput.files[0]) {
+    musicSrc = await readFileAsDataUrl(musicInput.files[0]);
+  }
+
+  let videoSrc = CONFIG.videoSrc;
+  if (videoInput && videoInput.files && videoInput.files[0]) {
+    videoSrc = await readFileAsDataUrl(videoInput.files[0]);
+  }
+
+  let gallery = CONFIG.gallery.map((item) => ({ ...item }));
+  if (galleryInput && galleryInput.files && galleryInput.files.length) {
+    const uploaded = [];
+    for (let i = 0; i < galleryInput.files.length; i++) {
+      const file = galleryInput.files[i];
+      const src = await readFileAsDataUrl(file);
+      uploaded.push({ src, cap: galleryCaptions[i] || file.name || `Photo ${i + 1}` });
+    }
+    gallery = uploaded;
+  }
+
+  const content = {
+    herName: document.getElementById("adminHerName").value.trim() || CONFIG.herName,
+    yourName: document.getElementById("adminYourName").value.trim() || CONFIG.yourName,
+    startDate: document.getElementById("adminStartDate").value || toDateInputValue(CONFIG.startDate),
+    heroTitle: document.getElementById("adminHeroTitle").value.trim() || "Happy Girlfriend Day",
+    heroKicker: document.getElementById("adminHeroKicker").value.trim() || "for the one I adore",
+    heroSub: document.getElementById("adminHeroSub").value.trim() || "I made something special just for you.",
+    letterGreeting: document.getElementById("adminLetterGreeting").value.trim() || `Dear ${CONFIG.herName},`,
+    letterBody: document.getElementById("adminLetterBody").value,
+    letterSign: document.getElementById("adminLetterSign").value.trim() || `— Yours, ${CONFIG.yourName}`,
+    reveal1: document.getElementById("adminReveal1").value.trim() || "I Love You ❤️",
+    reveal2: document.getElementById("adminReveal2").value.trim() || "Happy Girlfriend Day",
+    reveal3: document.getElementById("adminReveal3").value.trim() || "You are my favorite person in the entire universe.",
+    gallery,
+    musicSrc,
+    musicVolume: CONFIG.musicVolume,
+    videoSrc,
+  };
+  localStorage.setItem("gf-day-admin-content", JSON.stringify(content));
+  renderGalleryPreview(content);
+  applyAdminContent(content);
+}
+function resetAdminContent() {
+  localStorage.removeItem("gf-day-admin-content");
+  const defaults = getDefaultAdminContent();
+  populateAdminForm(defaults);
+  applyAdminContent(defaults);
+}
+function initAdmin() {
+  const formReady = document.getElementById("adminHerName") &&
+    document.getElementById("adminYourName") &&
+    document.getElementById("adminStartDate") &&
+    document.getElementById("adminHeroTitle") &&
+    document.getElementById("adminHeroKicker") &&
+    document.getElementById("adminHeroSub") &&
+    document.getElementById("adminLetterGreeting") &&
+    document.getElementById("adminLetterBody") &&
+    document.getElementById("adminLetterSign") &&
+    document.getElementById("adminReveal1") &&
+    document.getElementById("adminReveal2") &&
+    document.getElementById("adminReveal3") &&
+    document.getElementById("adminSave") &&
+    document.getElementById("adminReset");
+
+  if (!formReady) return;
+
+  const saveBtn = document.getElementById("adminSave");
+  const resetBtn = document.getElementById("adminReset");
+  const content = loadAdminContent();
+  populateAdminForm(content);
+  renderGalleryPreview(content);
+  applyAdminContent(content);
+
+  saveBtn.addEventListener("click", () => {
+    saveAdminContent();
+    const status = document.getElementById("adminStatus");
+    if (status) {
+      status.textContent = "Saved successfully.";
+    }
+  });
+  resetBtn.addEventListener("click", () => {
+    resetAdminContent();
+    const status = document.getElementById("adminStatus");
+    if (status) {
+      status.textContent = "Reset to defaults.";
+    }
+  });
 }
 
 /* ---------- loader ---------- */
@@ -180,54 +420,21 @@ function initLoader() {
 /* ---------- hero button ---------- */
 function initHeroButton() {
   const btn = document.getElementById("openBtn");
-  const declineBtn = document.getElementById("declineBtn");
-  const question = document.querySelector(".hero-question");
-
-  const triggerRipple = (button, event) => {
+  btn.addEventListener("click", (e) => {
+    // ripple
     const rip = document.createElement("span");
     rip.className = "rip";
-    const r = button.getBoundingClientRect();
+    const r = btn.getBoundingClientRect();
     const size = Math.max(r.width, r.height);
     rip.style.width = rip.style.height = size + "px";
-    rip.style.left = event.clientX - r.left - size / 2 + "px";
-    rip.style.top = event.clientY - r.top - size / 2 + "px";
-    button.appendChild(rip);
+    rip.style.left = e.clientX - r.left - size / 2 + "px";
+    rip.style.top = e.clientY - r.top - size / 2 + "px";
+    btn.appendChild(rip);
     setTimeout(() => rip.remove(), 600);
-  };
-
-  btn.addEventListener("click", (e) => {
-    triggerRipple(btn, e);
+    // confetti + scroll
     burstConfetti();
     document.getElementById("counter").scrollIntoView({ behavior: "smooth" });
   });
-
-  if (declineBtn) {
-    const dodgeButton = (event) => {
-      const rect = declineBtn.getBoundingClientRect();
-      const containerRect = declineBtn.parentElement?.getBoundingClientRect();
-      if (!containerRect) return;
-
-      const maxX = Math.max(40, containerRect.width - rect.width - 20);
-      const maxY = Math.max(30, containerRect.height - rect.height - 20);
-      const shiftX = (Math.random() * 2 - 1) * maxX / 2;
-      const shiftY = (Math.random() * 2 - 1) * maxY / 2;
-
-      declineBtn.style.transform = `translate(${shiftX}px, ${shiftY}px)`;
-      declineBtn.style.zIndex = "3";
-      if (question) {
-        question.textContent = "Nope, try again 😄";
-      }
-    };
-
-    declineBtn.addEventListener("mouseenter", (e) => dodgeButton(e));
-    declineBtn.addEventListener("mousemove", (e) => dodgeButton(e));
-    declineBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      triggerRipple(declineBtn, e);
-      dodgeButton(e);
-    });
-  }
 }
 
 /* ---------- music ---------- */
@@ -596,7 +803,6 @@ function initGift() {
 }
 function celebrate() {
   burstConfetti();
-  burstLilies();
   // fireworks
   const end = Date.now() + 2500;
   (function frame() {
@@ -605,33 +811,6 @@ function celebrate() {
     if (Date.now() < end) requestAnimationFrame(frame);
   })();
   smallHearts();
-}
-function burstLilies() {
-  const layer = document.createElement("div");
-  layer.className = "gift-burst-layer";
-  const flowers = ["🌸", "🌼", "🌷", "🪻", "💐"];
-
-  for (let i = 0; i < 90; i++) {
-    const petal = document.createElement("span");
-    petal.className = "gift-flower-piece";
-    petal.textContent = flowers[i % flowers.length];
-
-    const angle = (i / 90) * Math.PI * 2 + Math.random() * 0.35;
-    const distance = 120 + Math.random() * 280;
-    const dx = Math.cos(angle) * distance;
-    const dy = Math.sin(angle) * distance - 20 + Math.random() * 30;
-    const scale = 0.7 + Math.random() * 0.8;
-    const rotation = (Math.random() - 0.5) * 720;
-
-    petal.style.setProperty("--dx", `${dx}px`);
-    petal.style.setProperty("--dy", `${dy}px`);
-    petal.style.setProperty("--scale", `${scale}`);
-    petal.style.setProperty("--rot", `${rotation}deg`);
-    layer.appendChild(petal);
-  }
-
-  document.body.appendChild(layer);
-  setTimeout(() => layer.remove(), 1800);
 }
 function burstConfetti() {
   if (typeof confetti !== "function") return;
