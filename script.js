@@ -121,32 +121,8 @@ You are my favorite hello and my hardest goodbye.`,
    From here down: the engine. No need to edit.
    ============================================================ */
 
-function initVideoQuality() {
-  const select = document.getElementById("videoQuality");
-  const video = document.getElementById("memoryVideo");
-  const source = document.getElementById("videoSource");
-
-  if (!select || !video || !source) return;
-
-  const qualityMap = {
-    "1080p": "assets/videos/1784128153431-1080p.mp4",
-    "720p": "assets/videos/1784128153431-720p.mp4",
-    "360p": "assets/videos/1784128153431-360p.mp4",
-  };
-
-  const applyQuality = (quality) => {
-    const src = qualityMap[quality] || qualityMap["720p"];
-    source.src = src;
-    video.load();
-  };
-
-  select.addEventListener("change", (event) => applyQuality(event.target.value));
-  applyQuality(select.value || "720p");
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   applyNames();
-  initVideoQuality();
   buildGallery();
   buildTimeline();
   buildReasons();
