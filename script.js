@@ -21,7 +21,7 @@ const CONFIG = {
   // Drop an .mp3 in assets/music/ and put its path here.
   musicSrc: "assets/music/song.mp3",
   musicVolume: 0.6,
-  videoSrc: "assets/videos/memory.mp4",
+  videoSrc: "assets/videos/1784128153431.MP4",
 
   /* --- love letter (types out on screen) --- */
   letter: `From the very first day, you turned ordinary moments into memories I never want to forget.
@@ -205,7 +205,11 @@ function loadAdminContent() {
     const raw = localStorage.getItem("gf-day-admin-content");
     if (!raw) return getDefaultAdminContent();
     const parsed = JSON.parse(raw);
-    return { ...getDefaultAdminContent(), ...parsed };
+    const defaults = getDefaultAdminContent();
+    if (parsed.videoSrc === "assets/videos/memory.mp4") {
+      parsed.videoSrc = defaults.videoSrc;
+    }
+    return { ...defaults, ...parsed };
   } catch {
     return getDefaultAdminContent();
   }
