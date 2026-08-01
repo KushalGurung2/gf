@@ -596,6 +596,7 @@ function initGift() {
 }
 function celebrate() {
   burstConfetti();
+  burstLilies();
   // fireworks
   const end = Date.now() + 2500;
   (function frame() {
@@ -604,6 +605,33 @@ function celebrate() {
     if (Date.now() < end) requestAnimationFrame(frame);
   })();
   smallHearts();
+}
+function burstLilies() {
+  const layer = document.createElement("div");
+  layer.className = "gift-burst-layer";
+  const flowers = ["🌸", "🌼", "🌷", "🪻", "💐"];
+
+  for (let i = 0; i < 90; i++) {
+    const petal = document.createElement("span");
+    petal.className = "gift-flower-piece";
+    petal.textContent = flowers[i % flowers.length];
+
+    const angle = (i / 90) * Math.PI * 2 + Math.random() * 0.35;
+    const distance = 120 + Math.random() * 280;
+    const dx = Math.cos(angle) * distance;
+    const dy = Math.sin(angle) * distance - 20 + Math.random() * 30;
+    const scale = 0.7 + Math.random() * 0.8;
+    const rotation = (Math.random() - 0.5) * 720;
+
+    petal.style.setProperty("--dx", `${dx}px`);
+    petal.style.setProperty("--dy", `${dy}px`);
+    petal.style.setProperty("--scale", `${scale}`);
+    petal.style.setProperty("--rot", `${rotation}deg`);
+    layer.appendChild(petal);
+  }
+
+  document.body.appendChild(layer);
+  setTimeout(() => layer.remove(), 1800);
 }
 function burstConfetti() {
   if (typeof confetti !== "function") return;
