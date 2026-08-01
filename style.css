@@ -287,6 +287,7 @@ img { max-width: 100%; display: block; }
 .btn-primary:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 18px 40px rgba(157,127,214,.55); }
 .btn-primary:active { transform: scale(.97); }
 .btn-secondary {
+  position: relative; z-index: 2;
   font-family: var(--font-body); font-size: 1rem; font-weight: 600;
   color: var(--purple-deep); cursor: pointer; border: 1px solid rgba(157,127,214,.25);
   padding: 14px 28px; border-radius: 50px; background: rgba(255,255,255,.8);

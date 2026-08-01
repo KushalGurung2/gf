@@ -202,11 +202,30 @@ function initHeroButton() {
   });
 
   if (declineBtn) {
-    declineBtn.addEventListener("click", (e) => {
-      triggerRipple(declineBtn, e);
+    const dodgeButton = (event) => {
+      const rect = declineBtn.getBoundingClientRect();
+      const containerRect = declineBtn.parentElement?.getBoundingClientRect();
+      if (!containerRect) return;
+
+      const maxX = Math.max(40, containerRect.width - rect.width - 20);
+      const maxY = Math.max(30, containerRect.height - rect.height - 20);
+      const shiftX = (Math.random() * 2 - 1) * maxX / 2;
+      const shiftY = (Math.random() * 2 - 1) * maxY / 2;
+
+      declineBtn.style.transform = `translate(${shiftX}px, ${shiftY}px)`;
+      declineBtn.style.zIndex = "3";
       if (question) {
-        question.textContent = "Okay, maybe later 💕";
+        question.textContent = "Nope, try again 😄";
       }
+    };
+
+    declineBtn.addEventListener("mouseenter", (e) => dodgeButton(e));
+    declineBtn.addEventListener("mousemove", (e) => dodgeButton(e));
+    declineBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      triggerRipple(declineBtn, e);
+      dodgeButton(e);
     });
   }
 }
