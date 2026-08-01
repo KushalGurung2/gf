@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7c6d9" />
+  <title>Happy Girlfriend Day ❤️</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- AOS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============ 1. LOADING SCREEN ============ -->
+  <div id="loader">
+    <div class="loader-heart"></div>
+    <p class="loader-text">Preparing something special...</p>
+    <div class="loader-particles" id="loaderParticles"></div>
+  </div>
+
+  <!-- Floating decorations layers -->
+  <canvas id="petalCanvas" class="fx-canvas"></canvas>
+  <canvas id="heartCanvas" class="fx-canvas"></canvas>
+
+  <!-- ============ 3. FLOATING MUSIC PLAYER ============ -->
+  <div id="musicPlayer" class="music-player glass" aria-label="Music player">
+    <button id="musicToggle" class="music-btn" title="Play / Pause music" aria-label="Play or pause music">
+      <span class="music-icon">♪</span>
+    </button>
+    <div class="music-meta">
+      <span id="musicLabel">Play our song</span>
+      <input id="volume" type="range" min="0" max="1" step="0.01" value="0.6" aria-label="Volume" />
+    </div>
+    <audio id="audio" loop preload="none"></audio>
+  </div>
+
+  <!-- Progress bar -->
+  <div id="scrollProgress"></div>
+
+  <!-- ============ 2. WELCOME / HERO ============ -->
+  <section id="hero" class="section hero">
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+      <p class="hero-kicker" data-aos="fade-down">for the one I adore</p>
+      <h1 class="hero-title">
+        <span id="heroTitleText" class="hero-title-text">Happy Girlfriend Day</span>
+        <span class="beat">❤️</span>
+      </h1>
+      <p class="hero-sub">I made something special just for you.</p>
+      <button id="openBtn" class="btn-primary ripple">Open My Surprise</button>
+      <p class="scroll-hint">scroll to begin ↓</p>
+    </div>
+  </section>
+
+  <!-- ============ 10. LOVE COUNTER ============ -->
+  <section id="counter" class="section counter-section">
+    <h2 class="section-title" data-aos="fade-up">Every second with you</h2>
+    <p class="section-sub" data-aos="fade-up">We have shared…</p>
+    <div class="counter-grid" data-aos="zoom-in">
+      <div class="counter-card glass"><span id="cDays" class="cnum">0</span><span class="clabel">Days</span></div>
+      <div class="counter-card glass"><span id="cHours" class="cnum">0</span><span class="clabel">Hours</span></div>
+      <div class="counter-card glass"><span id="cMins" class="cnum">0</span><span class="clabel">Minutes</span></div>
+      <div class="counter-card glass"><span id="cSecs" class="cnum">0</span><span class="clabel">Seconds</span></div>
+    </div>
+    <p id="counterSince" class="counter-since"></p>
+  </section>
+
+  <!-- ============ 4. PHOTO GALLERY ============ -->
+  <section id="gallery" class="section">
+    <h2 class="section-title" data-aos="fade-up">Us, in little frames</h2>
+    <p class="section-sub" data-aos="fade-up">Tap any photo to look closer.</p>
+    <div id="galleryGrid" class="gallery-grid"></div>
+  </section>
+
+  <!-- ============ 5. TIMELINE ============ -->
+  <section id="timeline" class="section">
+    <h2 class="section-title" data-aos="fade-up">Our Journey</h2>
+    <p class="section-sub" data-aos="fade-up">The moments that built us.</p>
+    <div class="timeline" id="timelineWrap"></div>
+  </section>
+
+  <!-- ============ 6. LOVE LETTER ============ -->
+  <section id="letter" class="section">
+    <h2 class="section-title" data-aos="fade-up">A Letter For You</h2>
+    <div class="letter-card glass" data-aos="zoom-in">
+      <p class="letter-greeting" id="letterGreeting"></p>
+      <p id="letterBody" class="letter-body"><span id="typed"></span><span class="cursor">|</span></p>
+      <p class="letter-sign" id="letterSign"></p>
+    </div>
+  </section>
+
+  <!-- ============ 7. REASONS I LOVE YOU ============ -->
+  <section id="reasons" class="section">
+    <h2 class="section-title" data-aos="fade-up">Reasons I Love You</h2>
+    <p class="section-sub" data-aos="fade-up">Hover / tap a card to flip it.</p>
+    <div id="reasonsGrid" class="reasons-grid"></div>
+  </section>
+
+  <!-- ============ 8. MEMORY VIDEO ============ -->
+  <section id="videoSection" class="section">
+    <h2 class="section-title" data-aos="fade-up">Our Little Movie</h2>
+    <div class="video-wrap glass" data-aos="zoom-in">
+      <video id="memoryVideo" controls playsinline poster="assets/images/photo1_sm.jpg">
+        <source src="assets/videos/1784128153431.MOV" type="video/quicktime" />
+      </video>
+      <div id="videoFallback" class="video-fallback">
+        <p>🎬 Your video is now set to <code>assets/videos/1784128153431.MOV</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 12. PROMISE CARDS ============ -->
+  <section id="promises" class="section">
+    <h2 class="section-title" data-aos="fade-up">My Promises</h2>
+    <p class="section-sub" data-aos="fade-up">Flip each one.</p>
+    <div id="promiseGrid" class="promise-grid"></div>
+  </section>
+
+  <!-- ============ 13. MEMORY BOOK ============ -->
+  <section id="book" class="section">
+    <h2 class="section-title" data-aos="fade-up">Our Little Book</h2>
+    <div class="book glass" data-aos="zoom-in">
+      <div id="bookPage" class="book-page">
+        <div class="book-content" id="bookContent"></div>
+      </div>
+      <div class="book-controls">
+        <button id="bookPrev" class="btn-mini">‹ Prev</button>
+        <span id="bookIndicator" class="book-indicator"></span>
+        <button id="bookNext" class="btn-mini">Next ›</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 14. GIFT BOX SURPRISE ============ -->
+  <section id="gift" class="section">
+    <h2 class="section-title" data-aos="fade-up">One More Thing…</h2>
+    <p class="section-sub" data-aos="fade-up">Tap the gift.</p>
+    <div class="gift-stage">
+      <button id="giftBox" class="giftbox" aria-label="Open gift">
+        <div class="gift-lid"></div>
+        <div class="gift-body"></div>
+        <div class="gift-ribbon-v"></div>
+        <div class="gift-ribbon-h"></div>
+        <div class="gift-bow"></div>
+      </button>
+      <div id="giftReveal" class="gift-reveal">
+        <h2 id="revealLine1" class="reveal-line">I Love You ❤️</h2>
+        <h3 id="revealLine2" class="reveal-line">Happy Girlfriend Day</h3>
+        <p id="revealLine3" class="reveal-line">You are my favorite person in the entire universe.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 15. ENDING SCENE ============ -->
+  <section id="ending" class="section ending">
+    <canvas id="starCanvas" class="fx-canvas-local"></canvas>
+    <div class="moon"></div>
+    <div class="ending-text">
+      <h2 class="ending-forever">Forever &amp; Always</h2>
+      <p class="ending-love">I Love You ❤️</p>
+    </div>
+    <div id="lanterns"></div>
+  </section>
+
+  <!-- Secret envelopes injected here -->
+  <div id="secretLayer"></div>
+
+  <div class="admin-link-footer">
+    <a href="admin-login.html">Admin Panel</a>
+  </div>
+
+  <!-- Note modal (secret messages + envelopes) -->
+  <div id="noteModal" class="note-modal">
+    <div class="note-card glass">
+      <button id="noteClose" class="note-close" aria-label="Close">×</button>
+      <div class="note-seal">💌</div>
+      <p id="noteText"></p>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox">
+    <button id="lbClose" class="lb-close" aria-label="Close">×</button>
+    <button id="lbPrev" class="lb-nav lb-prev" aria-label="Previous">‹</button>
+    <img id="lbImg" alt="memory" />
+    <button id="lbNext" class="lb-nav lb-next" aria-label="Next">›</button>
+  </div>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.1.0/typed.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/canvas-confetti/1.9.3/confetti.browser.min.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="admin-shell">
+    <div class="admin-card glass">
+      <div class="admin-page-header">
+        <h1>Website Admin</h1>
+        <a href="index.html">View homepage</a>
+      </div>
+      <p>Edit the website content below. Your changes are saved in this browser.</p>
+
+      <label class="admin-field">
+        <span>Her name</span>
+        <input id="adminHerName" type="text" />
+      </label>
+      <label class="admin-field">
+        <span>Your name</span>
+        <input id="adminYourName" type="text" />
+      </label>
+      <label class="admin-field">
+        <span>Start date</span>
+        <input id="adminStartDate" type="date" />
+      </label>
+      <label class="admin-field">
+        <span>Hero title</span>
+        <input id="adminHeroTitle" type="text" />
+      </label>
+      <label class="admin-field">
+        <span>Music file (upload)</span>
+        <input id="adminMusicUpload" type="file" accept="audio/*" />
+      </label>
+      <label class="admin-field">
+        <span>Video file (upload)</span>
+        <input id="adminVideoUpload" type="file" accept="video/*" />
+      </label>
+      <label class="admin-field">
+        <span>Gallery photos (upload multiple)</span>
+        <input id="adminGalleryFiles" type="file" accept="image/*" multiple />
+      </label>
+      <label class="admin-field">
+        <span>Gallery captions</span>
+        <textarea id="adminGalleryCaptions" rows="4" placeholder="One caption per line for the uploaded photos"></textarea>
+      </label>
+      <label class="admin-field">
+        <span>Current gallery items</span>
+        <div id="adminGalleryPreview" class="admin-gallery-preview"></div>
+      </label>
+      <label class="admin-field">
+        <span>Hero kicker</span>
+        <input id="adminHeroKicker" type="text" />
+      </label>
+      <label class="admin-field">
+        <span>Hero subtext</span>
+        <input id="adminHeroSub" type="text" />
+      </label>
+      <label class="admin-field">
+        <span>Letter greeting</span>
+        <input id="adminLetterGreeting" type="text" />
+      </label>
+      <label class="admin-field">
+        <span>Letter body</span>
+        <textarea id="adminLetterBody" rows="6"></textarea>
+      </label>
+      <label class="admin-field">
+        <span>Letter sign-off</span>
+        <input id="adminLetterSign" type="text" />
+      </label>
+      <label class="admin-field">
+        <span>Gift reveal line 1</span>
+        <input id="adminReveal1" type="text" />
+      </label>
+      <label class="admin-field">
+        <span>Gift reveal line 2</span>
+        <input id="adminReveal2" type="text" />
+      </label>
+      <label class="admin-field">
+        <span>Gift reveal line 3</span>
+        <input id="adminReveal3" type="text" />
+      </label>
+
+      <div class="admin-actions">
+        <button id="adminSave" class="btn-mini" type="button">Save</button>
+        <button id="adminReset" class="btn-mini" type="button">Reset</button>
+        <button id="adminLogout" class="btn-mini" type="button">Logout</button>
+      </div>
+      <p id="adminStatus" class="admin-hint"></p>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    if (sessionStorage.getItem('gf-admin-auth') !== 'true') {
+      window.location.href = 'admin-login.html';
+    }
+
+    document.getElementById('adminLogout').addEventListener('click', () => {
+      sessionStorage.removeItem('gf-admin-auth');
+      window.location.href = 'admin-login.html';
+    });
+  </script>
+</body>
+</html>

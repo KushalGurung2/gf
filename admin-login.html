@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="admin-login-wrap">
+    <div class="admin-login-box glass">
+      <h1>Admin Login</h1>
+      <p>Use your admin ID and password to open the editor.</p>
+      <input id="adminId" type="text" placeholder="Admin ID" />
+      <input id="adminPassword" type="password" placeholder="Password" />
+      <p id="adminLoginError" class="admin-auth-error"></p>
+      <div class="admin-actions">
+        <button id="adminLoginBtn" class="btn-mini" type="button">Login</button>
+        <a class="btn-mini" href="index.html">Back to site</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const adminId = document.getElementById('adminId');
+    const adminPassword = document.getElementById('adminPassword');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const errorBox = document.getElementById('adminLoginError');
+
+    const correctId = 'admin';
+    const correctPassword = 'gfday2026';
+
+    const tryLogin = () => {
+      if (adminId.value.trim() === correctId && adminPassword.value === correctPassword) {
+        sessionStorage.setItem('gf-admin-auth', 'true');
+        window.location.href = 'admin.html';
+      } else {
+        errorBox.textContent = 'Wrong admin ID or password.';
+      }
+    };
+
+    adminLoginBtn.addEventListener('click', tryLogin);
+    [adminId, adminPassword].forEach((field) => {
+      field.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') tryLogin();
+      });
+    });
+  </script>
+</body>
+</html>
